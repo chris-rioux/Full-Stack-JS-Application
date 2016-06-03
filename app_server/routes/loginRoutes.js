@@ -4,6 +4,7 @@ var passportConfig = require('../../config/passportConfig');
 
 var loginCtrl = require('../controllers/loginCtrl');
 
+router.get('/', loginCtrl.index);
 router.get('/', loginCtrl.home);
 
 router.get('/login', loginCtrl.login);

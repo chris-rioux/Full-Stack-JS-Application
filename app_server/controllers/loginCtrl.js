@@ -3,12 +3,16 @@ var models = require('../../app_api/models');
 var bcrypt = require('bcrypt');
 const saltRounds = 13;
 
+module.exports.index = function(req, res) {
+	res.render('index');
+};
+
 module.exports.home = function(req, res) {
 	res.render('log', {athlete : req.athlete});
 };
 
 module.exports.login = function(req, res) {
-	res.render('login')
+	res.render('login');
 };
 
 module.exports.authenticate = function(req, res) {
