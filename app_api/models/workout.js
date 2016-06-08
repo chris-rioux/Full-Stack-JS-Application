@@ -4,14 +4,15 @@ module.exports = function(sequelize, DataTypes) {
         wrkt_name : DataTypes.STRING,
         duration : DataTypes.DECIMAL,
         athlete_id : DataTypes.INTEGER
-    }, {
+    }, 
+    {
+    	underscored : true,
         classMethods: {
             associate : function(models) {
                 Workout.belongsTo(models.Athlete, {
                     onDelete : "CASCADE",
-                    foreignKey : { 
-                        allowNull : false // must be associated
-                    }
+                    allowNull : false, // must be associated
+                    foreignKey : 'athlete_id'
                 });
                 
                 Workout.belongsToMany(models.Exercise, {
@@ -23,6 +24,5 @@ module.exports = function(sequelize, DataTypes) {
             }
         }
     });
-
     return Workout;
 }

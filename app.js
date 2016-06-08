@@ -8,6 +8,7 @@ var passportConfig = require('./config/passportConfig');
 var models = require('./app_api/models');
 var bcrypt = require('bcrypt');
 var port = process.env.PORT || 3000;
+var request = require('request');
 
 var secret;
 
@@ -42,8 +43,9 @@ var handlebars = require("express-handlebars").create({defaultLayout:"../../app_
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
+app.use('/', require('./app_server/routes/appRoutes.js'));
 app.use('/athlete', require('./app_api/routes/athleteRoutes.js'));
-app.use('/', require('./app_server/routes/loginRoutes.js'));
+app.use('/exercises', require('./app_api/routes/exerciseRoutes.js'));
 
 models.sequelize.sync() //  put { force : true } inside sync method to force db creation
 	.then(function() {

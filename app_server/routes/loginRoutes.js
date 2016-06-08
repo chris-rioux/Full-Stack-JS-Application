@@ -5,18 +5,19 @@ var passportConfig = require('../../config/passportConfig');
 var loginCtrl = require('../controllers/loginCtrl');
 
 router.get('/', loginCtrl.index);
-router.get('/', loginCtrl.home);
+
+router.get('/athletes', loginCtrl.athletes);
+
+router.get('/home', loginCtrl.home);
 
 router.get('/login', loginCtrl.login);
-router.post('/login', passportConfig.authenticate('local',
-					{
-						failureRedirect : '/login'
-					}),
-					loginCtrl.authenticate);
+
+router.post('/login', loginCtrl.authenticate);
 					
 router.get('/logout', loginCtrl.logout);
 
 router.get('/signup', loginCtrl.signup);
+
 router.post('/signup', loginCtrl.register);
 
 module.exports = router;

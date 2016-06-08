@@ -5,6 +5,10 @@ var bcrypt = require('bcrypt');
 var models = require('../app_api/models');
 
 passport.use(new LocalStrategy(
+	{
+		usernameField: 'email',
+		passwordField: 'password'
+	},
 	function(email, password, callback) {
 		models.Athlete.findOne({
 			where : {
@@ -19,7 +23,7 @@ passport.use(new LocalStrategy(
 				if (err || !result) {
 					return callback(null, false);
 				}
-				return callback(null, user);
+				return callback(null, athlete);
 			});
 		})
 		.catch(function(err) {

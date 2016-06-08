@@ -5,10 +5,14 @@ module.exports = function(sequelize, DataTypes) {
 		birthday : DataTypes.DATEONLY,
 		password : DataTypes.STRING,
 		gym : DataTypes.STRING
-	}, {
+	}, 
+    {
+    	underscored : true,
 		classMethods: {
 			associate : function(models) {
-				Athlete.hasMany(models.Workout)
+				Athlete.hasMany(models.Workout, {
+					foreignKey : 'athlete_id'
+				})
 			}
 		}
 	});

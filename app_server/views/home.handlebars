@@ -1,0 +1,149 @@
+<!-- Main -->
+<section id="main" class="bg-light-gray">
+    <div class="container">
+    
+    <!-- Athlete Information Section -->
+    <div class="row">
+    	<div class="col-sm-4">
+        	<div class="team-member">
+            	<h3 class="section-heading">Welcome Back!</h3>
+                <img src="/img/smallestPic.jpg" class="img-responsive img-circle" alt="">
+                <h4></h4>
+                </br>
+            </div>
+        </div>
+        <div class="col-sm-8 text-center" style="margin-top:-75px;margin-bottom:75px;">
+        	<div class="panel-group" id="accordion">
+				<div class="panel panel-default">
+                    <div id="title" class="panel-heading">
+                    <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{this.id}}" class="">
+                    	{{athlete.name}}
+                    </a>
+                    </h4>
+                    </div>
+                    <div id="collapse{{this.id}}" class="panel-collapse collapse">
+                        <div id="infoDiv{{this.id}}" class="panel-body">
+        					<div class="well well-sm">
+            					<ul class="list-group">
+                					<li class="list-group-item">Athlete ID: {{athlete.id}}</li>
+                					<li class="list-group-item">Birthday: {{athlete.birthday}}</li>
+                					<!-- <li class="list-group-item">Gender: {{athlete.gender}}</li> -->
+                					<li class="list-group-item">Email: {{athlete.email}}</li>
+                					<li class="list-group-item">Gym: {{athlete.gym}}</li>
+          						</ul>
+          					</div>   
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+    </div><!-- /.row -->
+   
+ 	<!-- A search bar for finding workouts - maybe even sorting them, oldest to newest, etc -->
+    	
+     <!-- Athlete Workout Information -->
+    {{#each athlete.Workouts}}
+    <div class="row">
+        <div class="col-lg-12 text-center">
+			<div class="panel-group" id="accordion">
+				<div class="panel panel-default">
+                    <div id="title" class="panel-heading">
+                    <h4 class="panel-title">
+                    <a woId="{{this.id}}" data-toggle="collapse" data-parent="#accordion" href="#collapse{{this.id}}" class="" style="color:#fed136;">
+                    	{{this.wrkt_name}}
+                    </a>
+                    </h4>
+                    </div>
+                    <div id="collapse{{this.id}}" class="panel-collapse collapse">
+                        <div id="infoDiv{{this.id}}" class="panel-body">
+                        	<div class="well well-sm">
+                        		<ul class="list-group">
+                        			<li class="list-group-item">{{this.wrkt_date}}</li>
+                        			<li class="list-group-item">{{this.duration}} Seconds</li>
+                       				{{#each this.Exercises}}
+                       				<li class="list-group-item">{{this.WorkoutExercise.repetitions}} {{this.mvmt_name}}(s) @ {{this.WorkoutExercise.weight}}#</li>
+                       				{{/each}}
+                       			</ul>
+                       		</div>
+                        </div>
+                        
+                        <button id="addExercise" type="submit" class="btn btn-sm btn-primary center-block" data-target="#exerciseModal" data-toggle="modal">Add Exercise</button>
+						</br>
+
+                    </div>
+                </div>
+			</div>
+ 		</div>
+    </div><!-- /.row -->
+    {{/each}}
+        
+    <!-- Add Workout Accordion -->
+    <div class="row">
+        <div class="col-lg-12 text-center">    
+        	<div class="panel-group" id="accordion">
+				<div class="panel panel-default">
+               		<div id="title" class="panel-heading">
+                    <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseZ" class="">
+                    	Add Workout
+                    </a>
+                    </h4>
+                    </div>
+                    <div id="collapseZ" class="panel-collapse collapse">
+                    </br>
+                    	<form action="/createWO" method="POST">
+    						<input type="date" class="form-control" name="wrkt_date" placeholder="Enter date">
+  							</br>
+    						<input type="text" class="form-control" name="wrkt_name" placeholder="Name your fitness">
+  							</br>
+    						<input type="number" class="form-control" name="duration" placeholder="Time to complete - In seconds... Sorry.">
+  							</br>
+    						<input type="hidden" class="form-control" name="athlete_id" value="{{athlete.id}}">
+  							</br> 
+  							<button id="addWO" type="submit" class="btn btn-sm btn-primary center-block">Submit</button>
+						</form>						
+                    </div>
+                </div>
+			</div>
+		</div>
+    </div><!-- /.row -->
+        
+	</div>
+</section>
+
+<!-- Exercise Modals -->
+<div id="exerciseModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        	<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title text-xs-center" id="gridModalLabel">Add Exercise</h4>
+            <div id="exModalBody" class="modal-body">
+         
+            	<form action="/addWOEX" method="POST">
+            	    <input type="number" class="form-control" name="workout_id">
+  					<!--<input type="hidden" class="form-control" name="workout_id" value="{{this.id}}"/>-->
+  					</br>
+    				<select name="exercise_id" style="margin-bottom:20px;">
+    					{{#each exercises}}
+    					<option value="{{this.id}}">{{this.mvmt_name}}</option>
+    					{{/each}}
+    				</select>
+					</br>
+    				<input type="number" class="form-control" name="weight" placeholder="Weight in Pounds... 'Murica">
+					</br>
+    				<input type="number" class="form-control" name="repetitions" placeholder="Repetitions... Good Ones.">
+  					</br>
+  					<button id="addExercise" type="submit" class="btn btn-sm btn-primary center-block" data-target="#exerciseModal" data-toggle="modal">Submit</button>
+				</form>
+  			</div><!-- /.modal-body -->
+			</div><!-- /.modal-header -->
+    	</div><!-- /.modal-content -->
+  	</div><!-- /.modal-dialog -->
+</div><!-- /#exerciseModal -->
+
+<script>
+	
+
+</script>

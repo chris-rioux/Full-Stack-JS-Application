@@ -1,10 +1,27 @@
 var models = require('../models');
-var bcrypt = require('bcrypt');
-const saltRounds = 13;
+
+module.exports.index = function(req, res) {
+	models.Athlete.findAll()
+		.then(function(athletes) {
+			res.send(athletes);
+		})
+		.catch(function(err) {
+			console.log(err);
+			res.status(500);
+			res.send('500');
+		});
+};
 
 module.exports.show = function(req, res) {
-	models.Athlete.findById(req.params.id)
-		.then(function(athlete) {
+	models.Athlete.findById(req.params.id, {
+		include : [ 
+			{ 
+				model : models.Workout,
+				include : models.Exercise
+			} 
+		]
+	})
+		.then(function(athlete){
 			res.send(athlete);
 		})
 };

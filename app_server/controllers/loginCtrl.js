@@ -2,13 +2,52 @@ var passportConfig = require('../../config/passportConfig');
 var models = require('../../app_api/models');
 var bcrypt = require('bcrypt');
 const saltRounds = 13;
+var request = require('request');
+var apiURI = 'http://localhost:3000'
+
+if (process.env.NODE_ENV == 'production') {
+	apiURI = 'https://mighty-sands-16374.herokuapp.com';
+}
 
 module.exports.index = function(req, res) {
 	res.render('index');
 };
 
+module.exports.athletes = function(req, res) {
+	request.get(apiURI + '/athletes', function(error, response, body) {
+		if (!error) {
+			res.render('home', { athletes : JSON.parse(body) });
+		}
+		else {
+			res.sendStatus(500);
+		}
+	})
+};
+
 module.exports.home = function(req, res) {
-	res.render('log', {athlete : req.athlete});
+	if (req.user) {
+		request.get(apiURI + '/athlete/' + req.user.id, function(error, response, athlete) {
+			if (!error) {
+				request.get(apiURI + '/exercises', function(err, resp, exercises) {
+					if (!error) {
+						res.render('home', { 
+												athlete : JSON.parse(athlete),
+												exercises : JSON.parse(exercises) 
+											});
+					}
+					else {
+						res.sendStatus(500);
+					}
+				})
+			}
+			else {
+				res.sendStatus(500);
+			}
+		})
+	}
+	else {
+		res.redirect('/');
+	}
 };
 
 module.exports.login = function(req, res) {
@@ -21,7 +60,7 @@ module.exports.authenticate = function(req, res) {
 			return res.redirect('/');
 		}
 		req.login(athlete,function(err) {
-			return res.redirect('/');
+			return res.redirect('/home');
 		})
 	})(req,res);
 };
@@ -41,7 +80,7 @@ module.exports.register = function(req, res) {
 		})
 			.then(function(athlete) {
 				req.login(athlete,function(err) {
-					return res.redirect('/');
+					return res.redirect('/home');
 				})
 			});
 	});

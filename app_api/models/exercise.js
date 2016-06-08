@@ -3,8 +3,9 @@ module.exports = function(sequelize, DataTypes) {
 		mvmt_name : DataTypes.STRING,
 		modality : DataTypes.STRING,
 		description : DataTypes.STRING,
-	},
+	}, 
 	{
+		underscored : true,
 		classMethods: {
 			associate : function(models) {
 				Exercise.belongsToMany(models.Workout, {

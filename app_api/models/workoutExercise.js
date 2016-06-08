@@ -4,6 +4,9 @@ module.exports = function(sequelize, DataTypes) {
         exercise_id : DataTypes.INTEGER,
         weight : DataTypes.DECIMAL,
         repetitions : DataTypes.INTEGER   
+    }, 
+    {
+    	underscored : true
     });
 
     return WorkoutExercise;
